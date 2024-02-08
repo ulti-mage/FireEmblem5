@@ -15,11 +15,13 @@ BIN/*.*
 *.csv.asm
 
 TOOLS/**
-!TOOLS/*.py
 
 *.sublime*
 
 *.dialogue.txt
+
+Voltedge.h
+VOLTEDGE/**
 
 Errors.txt
 Log.txt

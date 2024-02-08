@@ -7,9 +7,11 @@
 ; pre-fill the ROM.
 
   .include "SRC/BaseROM.asm"
+  
+  .include "Voltedge.h"
 
   ; Grab the base ROM as bytes for shenanigans.
-  ROM = binary(BASEROM)
+  ROM = binary("FE5.sfc")
 
   ; Temporary helper to work with data that crosses
   ; bank boundaries. TODO: add to Volt Edge.
@@ -74,6 +76,21 @@
   .include "SRC/UnitWindow.asm"
   .include "SRC/ShopWindow.asm"
   .include "SRC/ConvoyWindow.asm"
+
+
+
+
+  ; new stuff
+
+  .include "SRC/ActionMenu.asm"
+
+
+
+
+
+
+
+
 
 ; Sections
 
@@ -419,6 +436,22 @@
     endFreespace
 
   .endlogical
+
+
+  * = $038000
+  .logical $878000
+  
+      .dsection ActionMenuCommandsSection
+
+  .here
+
+
+
+
+
+
+
+
 
   * := $040000
   .logical mapped($040000)
