@@ -83,6 +83,7 @@
   ; new stuff
 
   .include "SRC/ActionMenu.asm"
+  .include "SRC/ItemUseEffects.asm"
 
 
 
@@ -442,6 +443,10 @@
   .logical $878000
   
       .dsection ActionMenuCommandsSection
+      aItemUsePointers .include "TABLES/ItemUseEffects.csv.asm" ; 87/AE5A
+      .dsection ItemUseEffectsSection
+
+      ; 87/C851
 
   .here
 

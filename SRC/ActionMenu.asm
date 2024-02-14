@@ -18,7 +18,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
     rlActionMenuInputHandler                          :?= address($858B43)
     rlTryGetBrokenItemID                              :?= address($83B0B7)
     rlFillInventoryHoles                              :?= address($83A49C)
-    rlGetItemUsePointer                               :?= address($87B143)
+    rlGetItemUseEffectPointer                         :?= address($87B143)
     rlDrawRightFacingStaticCursorHighPrio             :?= address($8590CF)
     rlUnknown85847C                                   :?= address($85847C)
     rlClearIconArray                                  :?= address($8A8060)
@@ -75,6 +75,8 @@ GUARD_FE5_MENU_COMMANDS :?= false
     rlGetItemNamePointer                              :?= address($83931A)
     rlDrawMenuText                                    :?= address($87E728)
     rlDrawItemCurrentDurability                       :?= address($858921)
+    rlGetEventCoordinatesByTileIndex                  :?= address($83A7EC)
+    rlSetCursorToCoordinates                          :?= address($83C181)
 
     MenuOptionValid   = $0100
     MenuOptionInvalid = $0200
@@ -753,7 +755,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
 
         .databank 0
 
-      rlUnknown8784AA ; 87/84AA
+      rlRestartProcActionMenu ; 87/84AA
 
         .al
         .autsiz
@@ -762,7 +764,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         lda wForcedMapScrollFlag,b
         bne +
 
-          lda #<>rlUnknown8784B6ProcCycle
+          lda #<>rlRestartProcActionMenuEffect
           sta aProcSystem.aHeaderOnCycle,b,x
 
         +
@@ -770,7 +772,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
 
         .databank 0
 
-      rlUnknown8784B6ProcCycle ; 87/84B6
+      rlRestartProcActionMenuEffect ; 87/84B6
 
         .al
         .autsiz
@@ -805,7 +807,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         ora #UnitStateMoved
         sta aSelectedCharacterBuffer.UnitState,b
 
-      rlUnknown8784DD ; 87/84DD
+      rlFreeProcActionMenu ; 87/84DD
 
         .al
         .autsiz
@@ -859,9 +861,9 @@ GUARD_FE5_MENU_COMMANDS :?= false
         jsl rlMenuClearActiveMenu
 
         phx
-        lda #(`$879B9B)<<8
+        lda #(`procCaptureWeaponSelect)<<8
         sta lR44+1
-        lda #<>$879B9B
+        lda #<>procCaptureWeaponSelect
         sta lR44
         jsl rlProcEngineCreateProc
         plx
@@ -1823,7 +1825,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         
         +
         jsl $8594C1
-        lda #<>rlProcMinimapCycle
+        lda #<>rlFreeProcAndUpdateCursorCoordinates
         sta aProcSystem.aBody4,b,x
         lda #<>rlUnknown879998
         sta aProcSystem.aHeaderOnCycle,b,x
@@ -1904,22 +1906,24 @@ GUARD_FE5_MENU_COMMANDS :?= false
 
         .databank 0
 
-      rlProcMinimapCycle ; 87/8AB7
+      rlFreeProcAndUpdateCursorCoordinates ; 87/8AB7
 
         .al
         .autsiz
         .databank ?
 
-        ; this needs a bigger name, as not just the minimap uses it
+        ; this needs a better name, as not just the minimap uses it
 
         jsl rlProcEngineFreeProc
         lda wCursorXCoord,b
         sta wR0
         lda wCursorYCoord,b
         sta wR1
-        jsl $83C181
+        jsl rlSetCursorToCoordinates
+
         lda #$FFFF
         sta $7E4F96
+
         jsl rlUnknown85847C
         rtl
 
@@ -1942,7 +1946,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
 
       procMinimap .block ; 87/8AE0
 
-        .dstruct structProcInfo, None, rlProcMinimapInit, rlProcMinimapCycle, None
+        .dstruct structProcInfo, None, rlProcMinimapInit, rlFreeProcAndUpdateCursorCoordinates, None
 
       .bend
 
@@ -2103,7 +2107,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
 
       procTalkCommand .block ; 87/8BC2
 
-        .dstruct structProcInfo, "tk", rlProcTalkCommandInit, rlProcTalkCommandCycle, None
+        .dstruct structProcInfo, "tk", rlProcTalkCommandInit, rlProcTalkDanceCommandCycle, None
 
       .bend
 
@@ -2141,7 +2145,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
 
         lda #$FFFF
         sta wTerrainWindowSide
-        jsl $87B31C
+        jsl rlCreateAllyInteractionMenuEffect
 
         lda #<>aTalkCommandInputRoutines
         sta lR18
@@ -2154,7 +2158,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
 
         .databank 0
 
-      rlProcTalkCommandCycle ; 87/8C16
+      rlProcTalkDanceCommandCycle ; 87/8C16
 
         .al
         .autsiz
@@ -2175,7 +2179,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         jmp ++
 
         +
-        jsl $87B2FC
+        jsl rlCreateAllyInteractionMenu
         
         +
         plb
@@ -2319,7 +2323,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         lda $172C,b
         bne +
 
-          jmp rlProcMinimapCycle
+          jmp rlFreeProcAndUpdateCursorCoordinates
         
         +
         rtl
@@ -2558,7 +2562,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         lda #aBurstWindowCharacterBuffer
         sta wR1
         jsl rlCopyCharacterDataToBufferByDeploymentNumber
-        jsl $87B42B
+        jsl rlCreateTradeInteractionMenuEffect
 
         lda #<>aTradeMenuInputRoutines
         sta $2F
@@ -2601,7 +2605,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         jsl rlCheckIfHighestPriorityMenu
         bcc +
 
-          jsl $87B40B
+          jsl rlCreateTradeInteractionMenu
 
         +
         plb
@@ -2680,7 +2684,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
 
         phx
         jsl rlMenuClearActiveMenus
-        jsl $879D57
+        jsl rlActionMenuClearBackgrounds
         jsl rlUnknownGetMapTileCoordsBySelectedUnit
         jsl rlRunChapterLocationEvents
         plx
@@ -2689,9 +2693,9 @@ GUARD_FE5_MENU_COMMANDS :?= false
         ora #(UnitStateMovementStar | UnitStateMoved)
         sta aSelectedCharacterBuffer.UnitState,b
 
-        lda #<>rlProcMinimapCycle
+        lda #<>rlFreeProcAndUpdateCursorCoordinates
         sta aProcSystem.aBody4,b,x
-        lda #<>rlUnknown879983
+        lda #<>rlDelayUntilActionFinished
         sta aProcSystem.aHeaderOnCycle,b,x
         rtl
 
@@ -2789,7 +2793,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
 
         phx
         jsl rlMenuClearActiveMenus
-        jsl $879D57
+        jsl rlActionMenuClearBackgrounds
         lda #<>rlActionMenuDoorOptionAInputEffect
         sta lR25
         lda #>`rlActionMenuDoorOptionAInputEffect
@@ -2826,7 +2830,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
           stz aProcSystem.aHeaderTypeOffset,b,x
         
         +
-        jsl rlUnknown8784DD
+        jsl rlFreeProcActionMenu
         rtl
 
         .databank 0
@@ -2846,7 +2850,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
           cmp #TerrainDoor
           bne +
 
-            jsl $83A7EC
+            jsl rlGetEventCoordinatesByTileIndex
             jsl rlRunChapterLocationEvents
 
         +
@@ -2935,7 +2939,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
 
         phx
         jsl rlMenuClearActiveMenus
-        jsl $879D57
+        jsl rlActionMenuClearBackgrounds
         lda #<>rlActionMenuDrawbridgeOptionAInputEffect
         sta lR25
         lda #>`rlActionMenuDrawbridgeOptionAInputEffect
@@ -2972,7 +2976,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
           stz aProcSystem.aHeaderTypeOffset,b,x
 
         +
-        jsl rlUnknown8784DD
+        jsl rlFreeProcActionMenu
         rtl
 
         .databank 0
@@ -2992,7 +2996,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
           cmp #TerrainDrawbridge
           bne +
 
-            jsl $83A7EC
+            jsl rlGetEventCoordinatesByTileIndex
             jsl rlRunChapterLocationEvents
 
         +
@@ -3060,7 +3064,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
 
         phx
         jsl rlMenuClearActiveMenus
-        jsl $879D57
+        jsl rlActionMenuClearBackgrounds
         jsl rlUnknownGetMapTileCoordsBySelectedUnit
         jsl rlRunChapterLocationEvents
         jsl rlActionCommandDecreaseLockpickUses
@@ -3072,9 +3076,9 @@ GUARD_FE5_MENU_COMMANDS :?= false
         +
         plx
 
-        lda #<>rlProcMinimapCycle
+        lda #<>rlFreeProcAndUpdateCursorCoordinates
         sta aProcSystem.aBody4,b,x
-        lda #<>rlUnknown879983
+        lda #<>rlDelayUntilActionFinished
         sta aProcSystem.aHeaderOnCycle,b,x
         rtl
 
@@ -3510,7 +3514,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
 
       procDanceCommand .block ; 87/93E8
 
-        .dstruct structProcInfo, "dk", rlProcDanceCommandInit, $878C16, None
+        .dstruct structProcInfo, "dk", rlProcDanceCommandInit, rlProcTalkDanceCommandCycle, None
 
       .bend
 
@@ -3545,7 +3549,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         lda #<>aBurstWindowCharacterBuffer
         sta wR1
         jsl rlCopyCharacterDataToBufferByDeploymentNumber
-        jsl $87B31C
+        jsl rlCreateAllyInteractionMenuEffect
 
         lda #<>aDanceCommandInputRoutines
         sta lR18
@@ -3587,7 +3591,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
 
         lda #<>rlUnknown87995E
         sta aProcSystem.aBody4,b,x
-        lda #<>rlUnknown879983
+        lda #<>rlDelayUntilActionFinished
         sta aProcSystem.aHeaderOnCycle,b,x
         rtl
 
@@ -4164,7 +4168,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         jsl rlCopyCharacterDataFromBuffer
         plx
 
-        lda #<>rlProcMinimapCycle
+        lda #<>rlFreeProcAndUpdateCursorCoordinates
         sta aProcSystem.aHeaderOnCycle,b,x
         rtl
 
@@ -4194,7 +4198,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         sta wR1
         jsl rlCopyCharacterDataFromBuffer
         plx
-        jmp rlProcMinimapCycle
+        jmp rlFreeProcAndUpdateCursorCoordinates
 
         .databank 0
 
@@ -4376,7 +4380,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
 
         lda #$FFFF
         sta wTerrainWindowSide
-        jsl $87B31C
+        jsl rlCreateAllyInteractionMenuEffect
 
         lda #<>aRescueCommandInputRoutines
         sta lR18
@@ -4408,7 +4412,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         jsl rlCheckIfHighestPriorityMenu
         bcc +
 
-          jsl $87B2FC
+          jsl rlCreateAllyInteractionMenu
 
         +
         plb
@@ -4443,7 +4447,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         jsl rlMenuClearActiveMenu
         jsl rlMenuDrawAllMenusFromBuffers
 
-        lda #<>rlProcMinimapCycle
+        lda #<>rlFreeProcAndUpdateCursorCoordinates
         sta aProcSystem.aHeaderOnCycle,b,x
         rtl
 
@@ -4455,7 +4459,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         .autsiz
         .databank $7E
 
-        jmp rlUnknown8784DD
+        jmp rlFreeProcActionMenu
 
       rlEvaluateGiveTakeDirection ; 87/9961
 
@@ -4504,7 +4508,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
 
         .databank 0
 
-      rlUnknown879983 ; 87/9983
+      rlDelayUntilActionFinished ; 87/9983
 
         .al
         .autsiz
@@ -4953,7 +4957,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         jsl rlCreateMenu
         sta aProcSystem.aHeaderUnknownTimer,b,x
 
-        jsl $85827A
+        jsl rlMenuSetActiveMenu
 
         lda aMenuOptions
         and #$00FF
@@ -5126,9 +5130,9 @@ GUARD_FE5_MENU_COMMANDS :?= false
         .autsiz
         .databank $7E
 
-        lda #<>rlProcMinimapCycle
+        lda #<>rlFreeProcAndUpdateCursorCoordinates
         sta aProcSystem.aBody4,b,x
-        lda #<>rlUnknown879983
+        lda #<>rlDelayUntilActionFinished
         sta aProcSystem.aHeaderOnCycle,b,x
 
         lda aSelectedCharacterBuffer.Rescue,b
@@ -5154,6 +5158,12 @@ GUARD_FE5_MENU_COMMANDS :?= false
         rep #$30
 
         jsl $8593EB
+
+      rlActionMenuClearBackgrounds ; 87/9D57
+
+        .al
+        .autsiz
+        .databank $7E
 
         lda #<>aBG1TilemapBuffer
         sta wR0
@@ -5409,7 +5419,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
 
         lda #$FFFF
         sta wTerrainWindowSide
-        jsl $87B31C
+        jsl rlCreateAllyInteractionMenuEffect
 
         lda #<>aGiveCommandInputRoutines
         sta lR18
@@ -5446,7 +5456,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         jsl rlCheckIfHighestPriorityMenu
         bcc +
 
-          jsl $87B2FC
+          jsl rlCreateAllyInteractionMenu
         
         +
         plb
@@ -5589,7 +5599,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         sta wR1
         jsl rlCopyCharacterDataFromBuffer
         jsl rlRegisterAllMapSpritesAndStatus
-        jsr $87A26A
+        jsr rsUnknown87A26A
         plx
 
         lda aProcSystem.aHeaderUnknownTimer,b,x
@@ -5733,9 +5743,9 @@ GUARD_FE5_MENU_COMMANDS :?= false
         jsl rlProcEngineFreeProc
 
         phx
-        lda #(`$87A108)<<8
+        lda #(`procTakeCommand)<<8
         sta lR44+1
-        lda #<>$87A108
+        lda #<>procTakeCommand
         sta lR44
         jsl rlProcEngineCreateProc
         plx
@@ -5784,7 +5794,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
 
         lda #$FFFF
         sta wTerrainWindowSide
-        jsl $87B31C
+        jsl rlCreateAllyInteractionMenuEffect
 
         lda #<>aTakeCommandInputRoutines
         sta lR18
@@ -5821,7 +5831,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         jsl rlCheckIfHighestPriorityMenu
         bcc +
 
-          jsl $87B2FC
+          jsl rlCreateAllyInteractionMenu
         
         +
         plb
@@ -6170,7 +6180,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
             jsl rlCheckItemEquippable
             bcc _End
 
-              jsl $87B1B3
+              jsl rlGetItemUseAvailabilityPointer
 
               lda lR25
               pha
@@ -6238,7 +6248,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         lda wSelectedMenuOptionOffset
         tax
         lda aSelectedCharacterBuffer.Items,b,x
-        jsl $87A341
+        jsl rlCheckForUsableStavesEffect
 
         lda $4F42,b
         rtl
@@ -6282,7 +6292,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         jsl rlCreateMenu
         sta aProcSystem.aHeaderUnknownTimer,b,x
 
-        jsl $85827A
+        jsl rlMenuSetActiveMenu
 
         lda aMenuOptions
         and #$00FF
@@ -6344,7 +6354,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         sta aProcSystem.aHeaderOnCycle,b,x
 
         stz wCapturingFlag
-        jsl $858310
+        jsl rlMenuDrawAllMenusFromBuffers
         jsr rsDrawPortraitToBG1
 
         sep #$20
@@ -6406,16 +6416,16 @@ GUARD_FE5_MENU_COMMANDS :?= false
         stx $4F4A,b
         lda aSelectedCharacterBuffer.Items,b,x
         jsl rlCopyItemDataToBuffer
-        jsl rlGetItemUsePointer
+        jsl rlGetItemUseEffectPointer
 
-        lda #<>$87BB2B
+        lda #<>aStaffTargetSelectMenuInputRoutines
         sta lR18
-        lda #>`$87BB2B
+        lda #>`aStaffTargetSelectMenuInputRoutines
         sta lR18+1
         jsl $858E43
         plx
 
-        lda #<>$87B818
+        lda #<>rlHandleUseEffectCycle
         sta aProcSystem.aHeaderOnCycle,b,x
         rtl
 
@@ -7352,7 +7362,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         and #$00FF
         beq _End
 
-          jsl $87B1B3
+          jsl rlGetItemUseAvailabilityPointer
 
           lda lR25
           pha
@@ -7781,9 +7791,9 @@ GUARD_FE5_MENU_COMMANDS :?= false
         sta wR1
         jsl rlFillInventoryHoles
 
-        jsl rlGetItemUsePointer
+        jsl rlGetItemUseEffectPointer
         plx
-        lda #<>$87B818
+        lda #<>rlHandleUseEffectCycle
         sta aProcSystem.aHeaderOnCycle,b,x
         rtl
 
@@ -8038,7 +8048,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
 
         .databank 0
 
-        ; 87/AE5A aItemUsePointers
+        ; 87/AE5A
 
     .endsection ActionMenuCommandsSection
  
