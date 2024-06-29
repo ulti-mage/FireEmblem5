@@ -77,17 +77,13 @@ GUARD_FE5_MENU_COMMANDS :?= false
     rlDrawItemCurrentDurability                       :?= address($858921)
     rlGetEventCoordinatesByTileIndex                  :?= address($83A7EC)
     rlSetCursorToCoordinates                          :?= address($83C181)
+    rlPlaySoundEffectForced                           :?= address($808C7D)
 
     MenuOptionValid   = $0100
     MenuOptionInvalid = $0200
     MenuOptionHidden  = $0400
 
-
   .endweak
-
-
-
-
 
   .virtual $7E4F03
 
@@ -3144,9 +3140,11 @@ GUARD_FE5_MENU_COMMANDS :?= false
         .databank ?
 
         lda #$00E0
-        jsl $808C7D
+        jsl rlPlaySoundEffectForced
+
         lda #$000D
         sta wUnknown000E25,b
+
         lda #(`procActionMenu)<<8
         sta lR44+1
         lda #<>procActionMenu
@@ -3158,6 +3156,7 @@ GUARD_FE5_MENU_COMMANDS :?= false
         
         +
         jsl $80BB73
+
         lda #3
         rtl
 

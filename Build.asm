@@ -84,7 +84,8 @@
 
   .include "SRC/ActionMenu.asm"
   .include "SRC/ItemUseEffects.asm"
-
+  .include "SRC/Title.asm"
+  .include "SRC/WindowColorHDMA.asm"
 
 
 
@@ -366,6 +367,15 @@
     .dsection MenuUtilitiesSection
 
   .endlogical
+
+
+  * := $029132
+  .logical mapped($029132)
+
+    .dsection WindowColorHDMASection
+
+  .endlogical
+
 
   * := $029ADB
   .logical mapped($029ADB)
@@ -788,6 +798,29 @@
 
   .endlogical
 
+
+
+
+
+  * := $0A2DE9
+  .logical mapped($0A2DE9)
+
+    .dsection TitleMenu1Section
+    .dsection TitleScreen1Section
+    .dsection TitleMenu2Section
+    .dsection TitleScreen2Section
+    .dsection TitleMenu3Section
+    .dsection TitleScreen3Section
+    .dsection TitleMenu4Section
+
+  .endlogical
+
+
+
+
+
+
+
   * := $0A7DEA
   .logical mapped($0A7DEA)
 
@@ -1045,6 +1078,64 @@
     endDialogue
 
   .endlogical
+
+
+
+
+  * := $1CE2E3
+  .logical mapped($1CE2E3)
+
+    .dsection NintendoLogoSection
+
+  .endlogical
+
+
+  * := $1C82C6
+  .logical mapped($1C82C6)
+
+    .dsection TitleMenuTilemapDataSection
+
+  .endlogical
+
+
+  * := $1CF818
+  .logical mapped($1CF818)
+
+    .dsection TitleScreenFlameEffectSection
+
+  .endlogical
+
+
+
+  * := $1D03B8
+  .logical mapped($1D03B8)
+
+    .dsection TitlePalettesSection
+
+  .endlogical
+
+
+  * := $1D0A21
+  .logical mapped($1D0A21)
+
+    .dsection TitleGraphicDataSection
+
+  .endlogical
+
+
+
+  * := $1E8D85
+  .logical mapped($1E8D85)
+
+    .dsection ThirteenYearsLaterGraphicSection
+
+  .endlogical
+
+
+
+
+
+
 
   * := $204AFF
   .logical mapped($204AFF)
