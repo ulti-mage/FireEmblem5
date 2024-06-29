@@ -10,8 +10,7 @@
 
       wWindowColorHDMAModifyableTableDataOffset .word ?       ; $7E4F61
       wWindowColorHDMACurrentlyActiveTableDataOffset .word ?  ; $7E4F63
-      ; currently active
-      wWindowColorHDMAFinishedModifyingFlag .word ?            ; $7E4F65
+      wWindowColorHDMAFinishedModifyingFlag .word ?           ; $7E4F65
 
     .endvirtual
 
@@ -647,17 +646,16 @@
         .databank 0
 
       aWindowColorRedHDMA ; 85/940B
-        .structHDMAIndirectEntryInfo rlWindowColorRedHDMAInit,  rlWindowColorRedHDMACycle, aWindowColorRedHDMACode, aWindowColorHDMARedTable, COLDATA, DMAP_HDMA_Setting(DMAP_CPUToIO, true, DMAP_Mode0) + $8, $7E
+        .structHDMAIndirectEntryInfo rlWindowColorRedHDMAInit,  rlWindowColorRedHDMACycle, aWindowColorRedHDMACode, aWindowColorHDMARedTable, COLDATA, DMAP_HDMA_Setting(DMAP_CPUToIO, true, DMAP_Mode0) + $8, `aWindowColorHDMARedTableData1
 
       aWindowColorGreenHDMA ; 85/9417
-        .structHDMAIndirectEntryInfo rlWindowColorRedHDMACycle, rlWindowColorRedHDMACycle, aWindowColorRedHDMACode, aWindowColorHDMAGreenTable, COLDATA, DMAP_HDMA_Setting(DMAP_CPUToIO, true, DMAP_Mode0) + $8, $7E
+        .structHDMAIndirectEntryInfo rlWindowColorRedHDMACycle, rlWindowColorRedHDMACycle, aWindowColorRedHDMACode, aWindowColorHDMAGreenTable, COLDATA, DMAP_HDMA_Setting(DMAP_CPUToIO, true, DMAP_Mode0) + $8, `aWindowColorHDMAGreenTableData1
 
       aWindowColorBlueHDMA ; 85/9423
-        .structHDMAIndirectEntryInfo rlWindowColorRedHDMACycle, rlWindowColorRedHDMACycle, aWindowColorRedHDMACode, aWindowColorHDMABlueTable, COLDATA, DMAP_HDMA_Setting(DMAP_CPUToIO, true, DMAP_Mode0) + $8, $7E
+        .structHDMAIndirectEntryInfo rlWindowColorRedHDMACycle, rlWindowColorRedHDMACycle, aWindowColorRedHDMACode, aWindowColorHDMABlueTable, COLDATA, DMAP_HDMA_Setting(DMAP_CPUToIO, true, DMAP_Mode0) + $8, `aWindowColorHDMABlueTableData1
 
       ; Whoever did the color shading didn't fully know his HDMA stuff,
       ; these entries try to set the DMAP_DMAABusStep.
-
 
       rlWindowColorRedHDMAInit ; 85/942F
 
