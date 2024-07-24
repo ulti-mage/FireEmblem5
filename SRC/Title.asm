@@ -25,7 +25,7 @@
       rlCheckIfSaveSlotValid                      :?= address($81C7A8)
       rlGetDemoEvents                             :?= address($9AE134)
       rlProcPaletteChange                         :?= address($8EEC3A)
-      procMapBattlePaletteChange                  :?= address($8EEC55)
+      procPaletteChange                           :?= address($8EEC55)
       rlSetCurrentMenuColor                       :?= address($859532)
       rlClearBGOFS                                :?= address($9A958A)
       rlLoadDefaultOptionWindowColors             :?= address($8594CE)
@@ -525,19 +525,18 @@
 
       .with TitleScreenConfig
 
-
       aProcTitleCode ; 94/AE8F
 
         PROC_SONG_FADE_OUT 0
 
-        PROC_CALL_ARGS rlTitleSetFadeTimer, size(+)
+        PROC_CALL_ARGS rlSetFadeTimer, size(+)
         + .block
           .byte 1
         .bend
 
         -
         PROC_YIELD 1
-        PROC_JUMP_IF_ROUTINE_FALSE -, rlTitleWaitForFadeOut
+        PROC_JUMP_IF_ROUTINE_FALSE -, rlWaitForFadeOut
 
         PROC_CALL rlTitleScreenSetHardwareRegisters
 
@@ -560,14 +559,14 @@
 
           PROC_CREATE_PROC procTitleFlameScroll
 
-          PROC_CALL_ARGS rlTitleSetFadeTimer, size(+)
+          PROC_CALL_ARGS rlSetFadeTimer, size(+)
           + .block
             .byte 4
           .bend
 
           -
           PROC_YIELD 1
-          PROC_JUMP_IF_ROUTINE_FALSE -, rlTitleWaitForFadeIn
+          PROC_JUMP_IF_ROUTINE_FALSE -, rlWaitForFadeIn
 
           PROC_CALL rlSetTitleIdleLongTimer
 
@@ -590,14 +589,14 @@
         _SkipTitle
         PROC_CALL rlTitleSkipped
 
-        PROC_CALL_ARGS rlTitleSetFadeTimer, size(+)
+        PROC_CALL_ARGS rlSetFadeTimer, size(+)
         + .block
           .byte 1
         .bend
 
         -
         PROC_YIELD 1
-        PROC_JUMP_IF_ROUTINE_FALSE -, rlTitleWaitForFadeIn
+        PROC_JUMP_IF_ROUTINE_FALSE -, rlWaitForFadeIn
 
         PROC_JUMP _End
 
@@ -773,14 +772,14 @@
 
         PROC_SONG_FADE_OUT 0
 
-        PROC_CALL_ARGS rlTitleSetFadeTimer, size(+)
+        PROC_CALL_ARGS rlSetFadeTimer, size(+)
         + .block
           .byte 1
         .bend
 
         -
         PROC_YIELD 1
-        PROC_JUMP_IF_ROUTINE_FALSE -, rlTitleWaitForFadeOut
+        PROC_JUMP_IF_ROUTINE_FALSE -, rlWaitForFadeOut
 
         PROC_SET_ONCYCLE rlProcCycleBuildMapSaveMenu
         PROC_YIELD 1
@@ -797,14 +796,14 @@
         PROC_CALL rlUpdateVRAMBG3Page1
         PROC_YIELD 1
 
-        PROC_CALL_ARGS rlTitleSetFadeTimer, size(+)
+        PROC_CALL_ARGS rlSetFadeTimer, size(+)
         + .block
           .byte 1
         .bend
 
         -
         PROC_YIELD 1
-        PROC_JUMP_IF_ROUTINE_FALSE -, rlTitleWaitForFadeIn
+        PROC_JUMP_IF_ROUTINE_FALSE -, rlWaitForFadeIn
 
       aProcCodeTitleMenuLoadSave ; 94/B082
 
@@ -840,14 +839,14 @@
           PROC_SONG_FADE_OUT 0
 
         +
-        PROC_CALL_ARGS rlTitleSetFadeTimer, size(+)
+        PROC_CALL_ARGS rlSetFadeTimer, size(+)
         + .block
           .byte 1
         .bend
 
         -
         PROC_YIELD 1
-        PROC_JUMP_IF_ROUTINE_FALSE -, rlTitleWaitForFadeOut
+        PROC_JUMP_IF_ROUTINE_FALSE -, rlWaitForFadeOut
 
         PROC_SET_ONCYCLE rlProcCycleBuildMapSaveMenu
         PROC_YIELD 1
@@ -865,14 +864,14 @@
         PROC_CALL rlUpdateVRAMBG3Page1
         PROC_YIELD 1
 
-        PROC_CALL_ARGS rlTitleSetFadeTimer, size(+)
+        PROC_CALL_ARGS rlSetFadeTimer, size(+)
         + .block
           .byte 1
         .bend
 
         -
         PROC_YIELD 1
-        PROC_JUMP_IF_ROUTINE_FALSE -, rlTitleWaitForFadeIn
+        PROC_JUMP_IF_ROUTINE_FALSE -, rlWaitForFadeIn
 
       aProcCodeTitleMenuSaveGame ; 94/B108
 
@@ -913,14 +912,14 @@
 
       aProcMapDeleteSaveCode ; 94/B155
 
-        PROC_CALL_ARGS rlTitleSetFadeTimer, size(+)
+        PROC_CALL_ARGS rlSetFadeTimer, size(+)
         + .block
           .byte 1
         .bend
 
         -
         PROC_YIELD 1
-        PROC_JUMP_IF_ROUTINE_FALSE -, rlTitleWaitForFadeOut
+        PROC_JUMP_IF_ROUTINE_FALSE -, rlWaitForFadeOut
 
         PROC_SET_ONCYCLE rlProcCycleBuildMapSaveMenu
         PROC_YIELD 1
@@ -939,14 +938,14 @@
 
         PROC_YIELD 1
 
-        PROC_CALL_ARGS rlTitleSetFadeTimer, size(+)
+        PROC_CALL_ARGS rlSetFadeTimer, size(+)
         + .block
           .byte 1
         .bend
 
         -
         PROC_YIELD 1
-        PROC_JUMP_IF_ROUTINE_FALSE -, rlTitleWaitForFadeIn
+        PROC_JUMP_IF_ROUTINE_FALSE -, rlWaitForFadeIn
 
       aProcCodeTitleMenuDeleteSave ; 94/B19C
 
@@ -996,14 +995,14 @@
 
       aProcMapCopySaveCode ; 94/B1FF
 
-        PROC_CALL_ARGS rlTitleSetFadeTimer, size(+)
+        PROC_CALL_ARGS rlSetFadeTimer, size(+)
         + .block
           .byte 1
         .bend
 
         -
         PROC_YIELD 1
-        PROC_JUMP_IF_ROUTINE_FALSE -, rlTitleWaitForFadeOut
+        PROC_JUMP_IF_ROUTINE_FALSE -, rlWaitForFadeOut
 
         PROC_SET_ONCYCLE rlProcCycleBuildMapSaveMenu
         PROC_YIELD 1
@@ -1022,14 +1021,14 @@
 
         PROC_YIELD 1
 
-        PROC_CALL_ARGS rlTitleSetFadeTimer, size(+)
+        PROC_CALL_ARGS rlSetFadeTimer, size(+)
         + .block
           .byte 1
         .bend
 
         -
         PROC_YIELD 1
-        PROC_JUMP_IF_ROUTINE_FALSE -, rlTitleWaitForFadeIn
+        PROC_JUMP_IF_ROUTINE_FALSE -, rlWaitForFadeIn
 
       aProcCodeTitleMenuCopySave ; 94/B246
 
@@ -1226,7 +1225,7 @@
         cmp #3
         bne +
 
-          jsl rlSaveMenuHandleBPress
+          jsl rlHandleSaveMenuLeaving
 
         +
         rtl
@@ -1245,7 +1244,7 @@
         jsr rsGetFilledSaveSlotCount
         bcs +
 
-          jsl rlSaveMenuHandleBPress
+          jsl rlHandleSaveMenuLeaving
 
         +
         rtl
@@ -1307,7 +1306,6 @@
     .section TitleScreen2Section
 
       .with TitleScreenConfig
-
 
       rlSetTitleIdleShortTimer ; 94/B40E
 
@@ -1416,7 +1414,6 @@
     .section TitleMenu3Section
 
       .with TitleMenuConfig
-
 
       rlUnknown94B477 ; 94/B477
 
@@ -1595,12 +1592,12 @@
       aTitleMenuOptionTextVRAMPositions ; 94/B53E
 
         .word TitleMenuOptionTextPosition - BG3Base >> 1
-        .word TitleMenuOptionTextPosition + 1 * (12 * 2 * size(Tile2bpp)) - BG3Base >> 1
-        .word TitleMenuOptionTextPosition + 2 * (12 * 2 * size(Tile2bpp)) - BG3Base >> 1
-        .word TitleMenuOptionTextPosition + 3 * (12 * 2 * size(Tile2bpp)) - BG3Base >> 1
-        .word TitleMenuOptionTextPosition + 4 * (12 * 2 * size(Tile2bpp)) - BG3Base >> 1
-        .word TitleMenuOptionTextPosition + 5 * (12 * 2 * size(Tile2bpp)) - BG3Base >> 1
-        .word TitleMenuOptionTextPosition + 6 * (12 * 2 * size(Tile2bpp)) - BG3Base >> 1
+        .word TitleMenuOptionTextPosition + (12 * 2 * size(Tile2bpp)) - BG3Base >> 1
+        .word TitleMenuOptionTextPosition + ((12 * 2 * size(Tile2bpp)) * 2) - BG3Base >> 1
+        .word TitleMenuOptionTextPosition + ((12 * 2 * size(Tile2bpp)) * 3) - BG3Base >> 1
+        .word TitleMenuOptionTextPosition + ((12 * 2 * size(Tile2bpp)) * 4) - BG3Base >> 1
+        .word TitleMenuOptionTextPosition + ((12 * 2 * size(Tile2bpp)) * 5) - BG3Base >> 1
+        .word TitleMenuOptionTextPosition + ((12 * 2 * size(Tile2bpp)) * 6) - BG3Base >> 1
 
       rsGetTitleMenuSaveTextVRAMPosition ; 94/B54C
 
@@ -1622,8 +1619,8 @@
       aTitleMenuSaveTextVRAMPosition ; 94/B55B
 
         .word SaveSlotTextTilesPosition - BG3Base >> 1
-        .word SaveSlotTextTilesPosition + 1 * (SaveSlotTextSize[0] * SaveSlotTextSize[1] * size(Tile2bpp)) - BG3Base >> 1
-        .word SaveSlotTextTilesPosition + 2 * (SaveSlotTextSize[0] * SaveSlotTextSize[1] * size(Tile2bpp)) - BG3Base >> 1
+        .word SaveSlotTextTilesPosition + (SaveSlotTextSize[0] * SaveSlotTextSize[1] * size(Tile2bpp)) - BG3Base >> 1
+        .word SaveSlotTextTilesPosition + ((SaveSlotTextSize[0] * SaveSlotTextSize[1] * size(Tile2bpp)) * 2) - BG3Base >> 1
 
         .word SaveConfirmTextTilesPosition - BG3Base >> 1
 
@@ -1645,13 +1642,11 @@
 
         .databank 0
 
-      rlSaveMenuHandleBPress ; 94/B574
+      rlHandleSaveMenuLeaving ; 94/B574
 
         .al
         .autsiz
         .databank ?
-
-        ; Pressed B on the save slot menu
 
         jsr rsCheckIfLeavingTitleMenu
         bcs _Leaving
@@ -2273,22 +2268,22 @@
       aIntroTimelineTextVRAMPositions ; 94/B8E5
 
         .word IntroTimelineTextBaseTile - BG3Base >> 1
-        .word IntroTimelineTextBaseTile - BG3Base +  1 * (26 * 2 * size(Tile2bpp)) >> 1
-        .word IntroTimelineTextBaseTile - BG3Base +  2 * (26 * 2 * size(Tile2bpp)) >> 1
-        .word IntroTimelineTextBaseTile - BG3Base +  3 * (26 * 2 * size(Tile2bpp)) >> 1
-        .word IntroTimelineTextBaseTile - BG3Base +  4 * (26 * 2 * size(Tile2bpp)) >> 1
-        .word IntroTimelineTextBaseTile - BG3Base +  5 * (26 * 2 * size(Tile2bpp)) >> 1
-        .word IntroTimelineTextBaseTile - BG3Base +  6 * (26 * 2 * size(Tile2bpp)) >> 1
-        .word IntroTimelineTextBaseTile - BG3Base +  7 * (26 * 2 * size(Tile2bpp)) >> 1
-        .word IntroTimelineTextBaseTile - BG3Base +  8 * (26 * 2 * size(Tile2bpp)) >> 1
-        .word IntroTimelineTextBaseTile - BG3Base +  9 * (26 * 2 * size(Tile2bpp)) >> 1
-        .word IntroTimelineTextBaseTile - BG3Base + 10 * (26 * 2 * size(Tile2bpp)) >> 1
-        .word IntroTimelineTextBaseTile - BG3Base + 11 * (26 * 2 * size(Tile2bpp)) >> 1
-        .word IntroTimelineTextBaseTile - BG3Base + 12 * (26 * 2 * size(Tile2bpp)) >> 1
-        .word IntroTimelineTextBaseTile - BG3Base + 13 * (26 * 2 * size(Tile2bpp)) >> 1
-        .word IntroTimelineTextBaseTile - BG3Base + 14 * (26 * 2 * size(Tile2bpp)) >> 1
-        .word IntroTimelineTextBaseTile - BG3Base + 15 * (26 * 2 * size(Tile2bpp)) >> 1
-        .word IntroTimelineTextBaseTile - BG3Base + 16 * (26 * 2 * size(Tile2bpp)) >> 1
+        .word IntroTimelineTextBaseTile - BG3Base + (26 * 2 * size(Tile2bpp)) >> 1
+        .word IntroTimelineTextBaseTile - BG3Base + ((26 * 2 * size(Tile2bpp)) *  2) >> 1
+        .word IntroTimelineTextBaseTile - BG3Base + ((26 * 2 * size(Tile2bpp)) *  3) >> 1
+        .word IntroTimelineTextBaseTile - BG3Base + ((26 * 2 * size(Tile2bpp)) *  4) >> 1
+        .word IntroTimelineTextBaseTile - BG3Base + ((26 * 2 * size(Tile2bpp)) *  5) >> 1
+        .word IntroTimelineTextBaseTile - BG3Base + ((26 * 2 * size(Tile2bpp)) *  6) >> 1
+        .word IntroTimelineTextBaseTile - BG3Base + ((26 * 2 * size(Tile2bpp)) *  7) >> 1
+        .word IntroTimelineTextBaseTile - BG3Base + ((26 * 2 * size(Tile2bpp)) *  8) >> 1
+        .word IntroTimelineTextBaseTile - BG3Base + ((26 * 2 * size(Tile2bpp)) *  9) >> 1
+        .word IntroTimelineTextBaseTile - BG3Base + ((26 * 2 * size(Tile2bpp)) * 10) >> 1
+        .word IntroTimelineTextBaseTile - BG3Base + ((26 * 2 * size(Tile2bpp)) * 11) >> 1
+        .word IntroTimelineTextBaseTile - BG3Base + ((26 * 2 * size(Tile2bpp)) * 12) >> 1
+        .word IntroTimelineTextBaseTile - BG3Base + ((26 * 2 * size(Tile2bpp)) * 13) >> 1
+        .word IntroTimelineTextBaseTile - BG3Base + ((26 * 2 * size(Tile2bpp)) * 14) >> 1
+        .word IntroTimelineTextBaseTile - BG3Base + ((26 * 2 * size(Tile2bpp)) * 15) >> 1
+        .word IntroTimelineTextBaseTile - BG3Base + ((26 * 2 * size(Tile2bpp)) * 16) >> 1
  
       aIntroTimelineTextPointers ; 94/B907
 
@@ -2614,8 +2609,8 @@
 
       aSaveConfirmMenuCursorCoords ; 94/BBA2
 
-        .word  70 | (183 << 8)
-        .word 126 | (183 << 8)
+        .word pack([70, 183])
+        .word pack([126, 183])
 
       rlCreateSaveSlotCursor ; 94/BBA6
 
@@ -2665,7 +2660,7 @@
 
           lda #$0021
           jsl rlPlaySound
-          jsl rlSaveMenuHandleBPress
+          jsl rlHandleSaveMenuLeaving
           rtl
 
         +
@@ -2838,9 +2833,6 @@
         .al
         .autsiz
         .databank ?
-
-        ; Based on the index in aProcSystem.aBody0,
-        ; keeps the value between 0 and 2.
 
         lda aProcSystem.aBody0,b,x
         bpl +
@@ -3158,7 +3150,6 @@
 
       .with TitleScreenConfig
 
-
       procTitleFromIntoScenes .structProcInfo "xx", rlProcTitleFromIntoScenesInit, None, aProcTitleFromIntoScenesCode ; 94/BE5F
 
       rlProcTitleFromIntoScenesInit ; 94/BE67
@@ -3200,13 +3191,13 @@
           .structPaletteChangeData aOAMPaletteBuffer.aPalette3, aThirteenYearsLaterPalette, aOAMPaletteBuffer.aPalette4, None, 32, false
         .bend
 
-        PROC_HALT_WHILE procMapBattlePaletteChange
+        PROC_HALT_WHILE procPaletteChange
 
         PROC_YIELD 140
 
         PROC_CALL_ARGS rlProcPaletteChange, size(+)
         + .block
-          .structPaletteChangeData aBGPaletteBuffer.aPalette0, aWhitePalette, aBGPaletteBuffer.aPalette0 + 2, None, 64, false
+          .structPaletteChangeData aBGPaletteBuffer.aPalette0, aWhitePalette, aBGPaletteBuffer.aPalette0 + size(Color), None, 64, false
         .bend
 
         PROC_CALL_ARGS rlProcPaletteChange, size(+)
@@ -3214,7 +3205,7 @@
           .structPaletteChangeData aOAMPaletteBuffer.aPalette3, aWhitePalette, aOAMPaletteBuffer.aPalette4, None, 64, false
         .bend
 
-        PROC_HALT_WHILE procMapBattlePaletteChange
+        PROC_HALT_WHILE procPaletteChange
 
         PROC_CALL rlTitleScreenSetHardwareRegisters
         PROC_CALL rlClearThirteenYearsLaterSprite
@@ -3231,7 +3222,7 @@
 
         PROC_CALL_ARGS rlProcPaletteChange, size(+)
         + .block
-          .structPaletteChangeData aBGPaletteBuffer.aPalette0, aTitleFlamePalette, aBGPaletteBuffer.aPalette0+8, None, 32, false
+          .structPaletteChangeData aBGPaletteBuffer.aPalette0, aTitleFlamePalette, aBGPaletteBuffer.aPalette0 + (size(Color) * 4), None, 32, false
         .bend
 
         PROC_CALL_ARGS rlProcPaletteChange, size(+)
@@ -3265,7 +3256,7 @@
           .structPaletteChangeData aBGPaletteBuffer.aPalette5, aFireEmblemCrestFadingPalette, aOAMPaletteBuffer.aPalette0, None, 2048, false
         .bend
 
-        PROC_HALT_WHILE procMapBattlePaletteChange
+        PROC_HALT_WHILE procPaletteChange
 
         PROC_CALL_ARGS rlProcPaletteChange, size(+)
         + .block
@@ -3378,16 +3369,16 @@
         _Sprites..= [[(   0,    0), $00, SpriteSmall, C2I((10, 26)), 3, 3, false, false]]
         _Sprites..= [[(   8,   -8), $00, SpriteSmall, C2I((11, 25)), 3, 3, false, false]]
         _Sprites..= [[(   0,   -8), $00, SpriteSmall, C2I((10, 25)), 3, 3, false, false]]
-        _Sprites..= [[( -80,    0), $21, SpriteLarge, C2I((0, 26)), 3, 3, false, false]]
-        _Sprites..= [[( -16,    0), $21, SpriteLarge, C2I((8, 26)), 3, 3, false, false]]
-        _Sprites..= [[( -32,    0), $21, SpriteLarge, C2I((6, 26)), 3, 3, false, false]]
-        _Sprites..= [[( -48,    0), $21, SpriteLarge, C2I((4, 26)), 3, 3, false, false]]
-        _Sprites..= [[( -64,    0), $21, SpriteLarge, C2I((2, 26)), 3, 3, false, false]]
-        _Sprites..= [[( -16,  -16), $21, SpriteLarge, C2I((8, 24)), 3, 3, false, false]]
-        _Sprites..= [[( -32,  -16), $21, SpriteLarge, C2I((6, 24)), 3, 3, false, false]]
-        _Sprites..= [[( -48,  -16), $21, SpriteLarge, C2I((4, 24)), 3, 3, false, false]]
-        _Sprites..= [[( -64,  -16), $21, SpriteLarge, C2I((2, 24)), 3, 3, false, false]]
-        _Sprites..= [[( -80,  -16), $21, SpriteLarge, C2I((0, 24)), 3, 3, false, false]]
+        _Sprites..= [[( -80,    0), $21, SpriteLarge, C2I(( 0, 26)), 3, 3, false, false]]
+        _Sprites..= [[( -16,    0), $21, SpriteLarge, C2I(( 8, 26)), 3, 3, false, false]]
+        _Sprites..= [[( -32,    0), $21, SpriteLarge, C2I(( 6, 26)), 3, 3, false, false]]
+        _Sprites..= [[( -48,    0), $21, SpriteLarge, C2I(( 4, 26)), 3, 3, false, false]]
+        _Sprites..= [[( -64,    0), $21, SpriteLarge, C2I(( 2, 26)), 3, 3, false, false]]
+        _Sprites..= [[( -16,  -16), $21, SpriteLarge, C2I(( 8, 24)), 3, 3, false, false]]
+        _Sprites..= [[( -32,  -16), $21, SpriteLarge, C2I(( 6, 24)), 3, 3, false, false]]
+        _Sprites..= [[( -48,  -16), $21, SpriteLarge, C2I(( 4, 24)), 3, 3, false, false]]
+        _Sprites..= [[( -64,  -16), $21, SpriteLarge, C2I(( 2, 24)), 3, 3, false, false]]
+        _Sprites..= [[( -80,  -16), $21, SpriteLarge, C2I(( 0, 24)), 3, 3, false, false]]
 
         .structSpriteArray asThirteenYearsLaterFrame1._Sprites
 
@@ -4093,7 +4084,7 @@
         sta lR19+1
         lda #<>$000360
         sta lR19
-        lda #$0020
+        lda #size(Palette)
         sta lR20
         jsl rlBlockCopy
         rtl
@@ -4139,7 +4130,7 @@
         sta lR19+1
         lda #<>aBGPaletteBuffer.aPalette2
         sta lR19
-        lda #size(Palette) *2
+        lda #size(Palette) * 2
         sta lR20
         jsl rlBlockCopy
 
@@ -4163,7 +4154,7 @@
         sta lR19+1
         lda #<>aBGPaletteBuffer.aPalette5
         sta lR19
-        lda #size(Palette) *3
+        lda #size(Palette) * 3
         sta lR20
         jsl rlBlockCopy
 
@@ -4175,7 +4166,7 @@
         sta lR19+1
         lda #<>aOAMPaletteBuffer.aPalette0
         sta lR19
-        lda #size(Palette) *3
+        lda #size(Palette) * 3
         sta lR20
         jsl rlBlockCopy
 
@@ -4479,8 +4470,8 @@
 
       asTitleScreenBannerFrame5 .block ; 94/C7D1
 
-        _Sprites := [[(  64,  -20),  $0, SpriteSmall, $0093, 2, 1, false, false]]
-        _Sprites..= [[( -72,  -20),  $0, SpriteSmall, $0012, 2, 1, false, false]]
+        _Sprites := [[(  64,  -20), $00, SpriteSmall, $0093, 2, 1, false, false]]
+        _Sprites..= [[( -72,  -20), $00, SpriteSmall, $0012, 2, 1, false, false]]
         _Sprites..= [[(  56,   20), $21, SpriteLarge, $00AA, 2, 1, false, false]]
         _Sprites..= [[(  40,   20), $21, SpriteLarge, $00A8, 2, 1, false, false]]
         _Sprites..= [[(  56,    4), $21, SpriteLarge, $008A, 2, 1, false, false]]
@@ -4515,9 +4506,9 @@
 
       asTitleScreenBannerFrame6 .block ; 94/C864
 
-        _Sprites := [[( -72,  -21),  $0, SpriteSmall, $0012, 2, 1, false, false]]
-        _Sprites..= [[(  64,  -21),  $0, SpriteSmall, $0093, 2, 1, false, false]]
-        _Sprites..= [[(  88,  -13),  $0, SpriteSmall, $00A6, 2, 1, false, false]]
+        _Sprites := [[( -72,  -21), $00, SpriteSmall, $0012, 2, 1, false, false]]
+        _Sprites..= [[(  64,  -21), $00, SpriteSmall, $0093, 2, 1, false, false]]
+        _Sprites..= [[(  88,  -13), $00, SpriteSmall, $00A6, 2, 1, false, false]]
         _Sprites..= [[(  56,   19), $21, SpriteLarge, $00AA, 2, 1, false, false]]
         _Sprites..= [[(  40,   19), $21, SpriteLarge, $00A8, 2, 1, false, false]]
         _Sprites..= [[(  72,    3), $21, SpriteLarge, $008C, 2, 1, false, false]]
@@ -4558,9 +4549,9 @@
 
       asTitleScreenBannerFrame7 .block ; 94/C91A
 
-        _Sprites := [[(  88,  -14),  $0, SpriteSmall, $00A6, 2, 1, false, false]]
-        _Sprites..= [[(  64,  -22),  $0, SpriteSmall, $0093, 2, 1, false, false]]
-        _Sprites..= [[( -72,  -22),  $0, SpriteSmall, $0012, 2, 1, false, false]]
+        _Sprites := [[(  88,  -14), $00, SpriteSmall, $00A6, 2, 1, false, false]]
+        _Sprites..= [[(  64,  -22), $00, SpriteSmall, $0093, 2, 1, false, false]]
+        _Sprites..= [[( -72,  -22), $00, SpriteSmall, $0012, 2, 1, false, false]]
         _Sprites..= [[(  56,   18), $21, SpriteLarge, $00AA, 2, 1, false, false]]
         _Sprites..= [[(  40,   18), $21, SpriteLarge, $00A8, 2, 1, false, false]]
         _Sprites..= [[(  72,    2), $21, SpriteLarge, $008C, 2, 1, false, false]]
@@ -4601,9 +4592,9 @@
 
       asTitleScreenBannerFrame8 .block ; 94/C9D0
 
-        _Sprites := [[( -72,  -23),  $0, SpriteSmall, $0012, 2, 1, false, false]]
-        _Sprites..= [[(  64,  -23),  $0, SpriteSmall, $0093, 2, 1, false, false]]
-        _Sprites..= [[(  88,  -15),  $0, SpriteSmall, $00A6, 2, 1, false, false]]
+        _Sprites := [[( -72,  -23), $00, SpriteSmall, $0012, 2, 1, false, false]]
+        _Sprites..= [[(  64,  -23), $00, SpriteSmall, $0093, 2, 1, false, false]]
+        _Sprites..= [[(  88,  -15), $00, SpriteSmall, $00A6, 2, 1, false, false]]
         _Sprites..= [[(  56,   17), $21, SpriteLarge, $00AA, 2, 1, false, false]]
         _Sprites..= [[(  40,   17), $21, SpriteLarge, $00A8, 2, 1, false, false]]
         _Sprites..= [[(  72,    1), $21, SpriteLarge, $008C, 2, 1, false, false]]
@@ -4645,9 +4636,9 @@
       asTitleScreenBannerFrame9 .block ; 94/CA86
 
         _Sprites := [[( 102,  -61), $21, SpriteLarge, $000E, 3, 1, false, false]]
-        _Sprites..= [[(  88,  -16),  $0, SpriteSmall, $00A6, 2, 1, false, false]]
-        _Sprites..= [[(  64,  -24),  $0, SpriteSmall, $0093, 2, 1, false, false]]
-        _Sprites..= [[( -72,  -24),  $0, SpriteSmall, $0012, 2, 1, false, false]]
+        _Sprites..= [[(  88,  -16), $00, SpriteSmall, $00A6, 2, 1, false, false]]
+        _Sprites..= [[(  64,  -24), $00, SpriteSmall, $0093, 2, 1, false, false]]
+        _Sprites..= [[( -72,  -24), $00, SpriteSmall, $0012, 2, 1, false, false]]
         _Sprites..= [[(  56,   16), $21, SpriteLarge, $00AA, 2, 1, false, false]]
         _Sprites..= [[(  40,   16), $21, SpriteLarge, $00A8, 2, 1, false, false]]
         _Sprites..= [[(  72,    0), $21, SpriteLarge, $008C, 2, 1, false, false]]
@@ -4719,7 +4710,6 @@
     .section TitleMenu4Section
 
       .with TitleMenuConfig
-
 
       rlUnknown94CBA2 ; 94/CBA2
 
@@ -6135,7 +6125,6 @@
 
         jsl rlClearParagonModeCheckIndex
 
-        ; Change hardware registers
         jsr rsReturnToTitleMenuSetHardwareRegisters
 
         jsr rsGetTitleMenuOptions
@@ -7213,7 +7202,7 @@
 
         .databank 0
 
-      rlTitleSetFadeTimer ; 94/DA10
+      rlSetFadeTimer ; 94/DA10
 
         .al
         .autsiz
@@ -7226,7 +7215,7 @@
 
         .databank 0
 
-      rlTitleWaitForFadeOut ; 94/DA1A
+      rlWaitForFadeOut ; 94/DA1A
 
         .al
         .autsiz
@@ -7238,7 +7227,7 @@
 
         .databank 0
 
-      rlTitleWaitForFadeIn ; 94/DA22
+      rlWaitForFadeIn ; 94/DA22
 
         .al
         .autsiz
@@ -8017,7 +8006,6 @@
     .endsection TitleMenu4Section
 
 
-
     .section TitleMenuTilemapDataSection
 
       startTilemaps
@@ -8043,157 +8031,6 @@
       endTilemaps
 
     .endsection TitleMenuTilemapDataSection
-
-
-
-
-    .section NintendoLogoSection
-
-      procNintendoLogo .structProcInfo "xx", None, None, aProcNintendoLogoCode ; B9/E2E3
-
-      aProcNintendoLogoCode ; B9/E2EB
-
-        PROC_YIELD 1
-        PROC_JUMP_IF_ROUTINE_TRUE _Skip, rlNintendoLogoSkipCheck
-        
-          PROC_CALL_ARGS rlTitleSetFadeTimer, size(_Args1)
-          _Args1 .block
-            .byte 1
-          .bend
-
-          -
-          PROC_YIELD 1
-          PROC_JUMP_IF_ROUTINE_FALSE -, rlTitleWaitForFadeOut
-
-          PROC_CALL rlUnknownB9E331
-
-          PROC_CALL_ARGS rlTitleSetFadeTimer, size(_Args2)
-          _Args2 .block
-            .byte 1
-          .bend
-
-          -
-          PROC_YIELD 1
-          PROC_JUMP_IF_ROUTINE_FALSE -, rlTitleWaitForFadeIn
-
-          PROC_PLAY_SFX $0081
-
-          PROC_YIELD 80
-
-        _Skip
-        PROC_CALL $80C3ED
-        PROC_END
-
-      rlNintendoLogoSkipCheck ; B9/E326
-
-        .al
-        .autsiz
-        .databank ?
-
-        lda wJoy1Input
-        bit #JOY_Start
-        beq +
-
-          sec
-          rtl
-        
-        +
-        clc
-        rtl
-
-        .databank 0
-
-      rlUnknownB9E331 ; B9/E331
-
-        .al
-        .autsiz
-        .databank ?
-
-        jsl rlDisableVBlank
-
-        sep #$20
-        lda #INIDISP_Setting(true, 0)
-        sta bBufferINIDISP
-        rep #$20
-
-        sep #$20
-        lda #INIDISP_Setting(true, 0)
-        sta INIDISP,b
-        rep #$20
-
-        sep #$20
-        lda #T_Setting(true, false, true, false, false)
-        sta bBufferTM
-        rep #$20
-
-        jsr $B9E69E
-        jsl $809C9B
-
-        lda #(`g4bppcNintendoLogo)<<8
-        sta lR18+1
-        lda #<>g4bppcNintendoLogo
-        sta lR18
-        lda #(`aDecompressionBuffer)<<8
-        sta lR19+1
-        lda #<>aDecompressionBuffer
-        sta lR19
-        jsl rlAppendDecompList
-
-        jsl rlDMAByStruct
-          .structDMAToVRAM aDecompressionBuffer, (16 * 4 * size(Tile4bpp)) + size(Tile4bpp), VMAIN_Setting(true), $A000
-
-        lda #(`acNintendoLogoTilemap)<<8
-        sta lR18+1
-        lda #<>acNintendoLogoTilemap
-        sta lR18
-        lda #(`aDecompressionBuffer)<<8
-        sta lR19+1
-        lda #<>aDecompressionBuffer
-        sta lR19
-        jsl rlAppendDecompList
-
-        jsl rlDMAByStruct
-          .structDMAToVRAM aDecompressionBuffer, $0700, VMAIN_Setting(true), $7000
-
-        lda #(`acNintendoLogoPalette)<<8
-        sta lR18+1
-        lda #<>acNintendoLogoPalette
-        sta lR18
-        lda #(`aBGPaletteBuffer.aPalette1)<<8
-        sta lR19+1
-        lda #<>aBGPaletteBuffer.aPalette1
-        sta lR19
-        jsl rlAppendDecompList
-
-        stz aBGPaletteBuffer.aPalette0,b
-
-        lda #$C000 >> 1
-        sta wR0
-        lda #$02FF
-        ldx #0
-        jsl rlClearVRAMTilemapEntry
-
-        sep #$20
-        lda #INIDISP_Setting(false, 0)
-        sta bBufferINIDISP
-        rep #$20
-
-        sep #$20
-        lda #INIDISP_Setting(false, 0)
-        sta INIDISP,b
-        rep #$20
-
-        jsl rlEnableVBlank
-        rtl
-
-        .databank 0
-
-        ; B9/E3DF
-
-    .endsection NintendoLogoSection
-
-
-
 
 
     .section TitleScreenFlameEffectSection
@@ -8290,7 +8127,6 @@
     .endsection TitleScreenFlameEffectSection
 
 
-
     .section TitlePalettesSection
 
       startPalettes
@@ -8303,7 +8139,6 @@
       endPalettes
 
     .endsection TitlePalettesSection
-
 
 
     .section TitleGraphicDataSection
@@ -8349,11 +8184,10 @@
       endTilemaps
 
       startPalettes
-        acNintendoLogoPalette                 .text ROM[$1D591A:$1D593A]
+        acNintendoLogoPalette                 .text ROM[$1D591A:$1D593B]
       endPalettes
       
     .endsection TitleGraphicDataSection
-
 
 
     .section ThirteenYearsLaterGraphicSection
@@ -8363,7 +8197,3 @@
       endGraphics
 
     .endsection ThirteenYearsLaterGraphicSection
-
-
-
-

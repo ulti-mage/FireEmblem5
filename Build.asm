@@ -86,6 +86,7 @@
   .include "SRC/ItemUseEffects.asm"
   .include "SRC/Title.asm"
   .include "SRC/WindowColorHDMA.asm"
+  .include "SRC/IntroScenes.asm"
 
 
 
@@ -802,6 +803,14 @@
 
 
 
+  * := $0A1F97
+  .logical mapped($0A1F97)
+
+    .dsection ProcScriptedPaletteChangeSection
+
+  .endlogical
+
+
   * := $0A2DE9
   .logical mapped($0A2DE9)
 
@@ -1021,6 +1030,26 @@
 
   .endlogical
 
+
+
+  * := $10C000
+  .logical mapped($10C000)
+
+    .dsection IntroScenesGraphicData7Section
+
+  .endlogical
+
+
+
+
+
+
+
+
+
+
+
+
   * := $180000
   .logical mapped($180000)
 
@@ -1082,13 +1111,6 @@
 
 
 
-  * := $1CE2E3
-  .logical mapped($1CE2E3)
-
-    .dsection NintendoLogoSection
-
-  .endlogical
-
 
   * := $1C82C6
   .logical mapped($1C82C6)
@@ -1098,38 +1120,89 @@
   .endlogical
 
 
-  * := $1CF818
-  .logical mapped($1CF818)
 
+
+
+  * := $1CD5EE
+  .logical mapped($1CD5EE)
+
+    .dsection IntroScenesSection
+    .dsection NintendoLogoSection
+    .dsection IntroScenes2Section
     .dsection TitleScreenFlameEffectSection
+    .dsection IntroScene3FlameEffectSection
+
+    .fill mapped($1C8000) + $8000 - *, $FF
 
   .endlogical
 
 
+  * := $1D0250
+  .logical mapped($1D0250)
 
-  * := $1D03B8
-  .logical mapped($1D03B8)
-
+    .dsection IntroScenesPalettesSection
     .dsection TitlePalettesSection
+    ; 1D0558
 
   .endlogical
+
+
+
+
 
 
   * := $1D0A21
   .logical mapped($1D0A21)
 
     .dsection TitleGraphicDataSection
+    .dsection IntroScenesGraphicData1Section
 
   .endlogical
 
+  * := $1D8000
+  .logical mapped($1D8000)
 
+    .dsection IntroScenesGraphicData2Section
 
-  * := $1E8D85
-  .logical mapped($1E8D85)
+  .endlogical
 
+  * := $1E0000
+  .logical mapped($1E0000)
+
+    .dsection IntroScenesGraphicData3Section
+
+  .endlogical
+
+  * := $1E8000
+  .logical mapped($1E8000)
+
+    .dsection IntroScenesGraphicData4Section
     .dsection ThirteenYearsLaterGraphicSection
+    ; 1E9220
 
   .endlogical
+
+
+  * := $1F6B29
+  .logical mapped($1F6B29)
+
+    .dsection IntroScenesGraphicData5Section
+
+  .endlogical
+
+  * := $1F8000
+  .logical mapped($1F8000)
+
+    .dsection IntroScenesGraphicData6Section
+    ; 1F846F
+
+  .endlogical
+
+
+
+
+
+
 
 
 
