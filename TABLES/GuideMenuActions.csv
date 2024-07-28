@@ -1,0 +1,3 @@
+.word 0,Handler
+Title,<>rsGuideMenuTitleInputHandler 
+Description,<>rsGuideMenuDescriptionInputHandler

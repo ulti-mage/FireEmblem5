@@ -87,6 +87,8 @@
   .include "SRC/Title.asm"
   .include "SRC/WindowColorHDMA.asm"
   .include "SRC/IntroScenes.asm"
+  .include "TEXT/GuideMenu.h"
+  .include "SRC/GuideMenu.asm"
 
 
 
@@ -730,6 +732,23 @@
     endFreespace
 
   .endlogical
+
+
+
+  * := $088012
+  .logical mapped($088012)
+
+    .dsection GuideMenuSection
+    .dsection GuideMenuDataSection
+
+  .endlogical
+
+
+
+
+
+
+
 
   * := $08CCEA
   .logical mapped($08CCEA)

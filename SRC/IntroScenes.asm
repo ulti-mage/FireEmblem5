@@ -114,7 +114,7 @@
       ; VRAM positions
 
         OAMBase = $8000
-        BG1Base = $7000
+        BG1Base = $7000 ; Tilemap is here but register is set to $A000
         BG2Base = $0000
         BG3Base = $C000
 
